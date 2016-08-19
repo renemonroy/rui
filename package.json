@@ -1,10 +1,14 @@
 {
   "name": "@renemonroy/rui",
-  "version": "1.0.0",
+  "version": "1.0.4",
   "description": "Set of custom React Components that form an UI library.",
-  "main": "lib/rui.js",
+  "main": "lib/index.js",
   "scripts": {
-    "test": "test"
+    "build:lib": "NODE_ENV=development webpack",
+    "build:dist": "NODE_ENV=production webpack -p --define process.env.NODE_ENV='\"production\"' --progress --colors",
+    "build": "npm run build:lib",
+    "clean": "rimraf lib dist",
+    "prepublish": "npm run clean && npm run build"
   },
   "repository": {
     "type": "git",
@@ -56,6 +60,7 @@
     "lodash": "^4.15.0",
     "react": "^15.3.0",
     "react-dom": "^15.3.0",
-    "react-motion": "^0.4.4"
+    "react-motion": "^0.4.4",
+    "rimraf": "^2.5.4"
   }
 }
