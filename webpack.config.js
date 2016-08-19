@@ -10,7 +10,7 @@ var getEntry = function() {
   //     'webpack/hot/only-dev-server'
   //   );
   // }
-  entry.push('./src/scripts/index.jsx');
+  entry.push('./src/index.jsx');
   return entry;
 };
 
