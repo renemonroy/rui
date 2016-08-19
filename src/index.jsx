@@ -1,1 +1,3 @@
-export RUISwipeableCards from './components/RUISwipeableCards';
+import RUISwipeableCards from './components/RUISwipeableCards';
+
+export { RUISwipeableCards }
