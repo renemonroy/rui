@@ -21,7 +21,7 @@ module.exports = {
   output: {
     path: path.join(__dirname, envIsDev ? 'lib' : 'dist'),
     publicPath: '/',
-    filename: 'bundle.js',
+    filename: 'rui.js',
   },
 
   devServer: {
