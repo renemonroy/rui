@@ -1,6 +1,7 @@
 var webpack = require('webpack');
 var envIsDev = process.env && process.env.NODE_ENV == 'development';
 var path = require('path');
+var src = path.join(__dirname, 'src');
 
 var getEntry = function() {
   var entry = [];
@@ -10,7 +11,7 @@ var getEntry = function() {
   //     'webpack/hot/only-dev-server'
   //   );
   // }
-  entry.push('./src/index.jsx');
+  entry.push(path.join(src, 'index.jsx'));
   return entry;
 };
 
@@ -52,6 +53,7 @@ module.exports = {
   },
 
   resolve: {
+    root: src,
     extensions: ['', '.js', '.jsx'],
   },
 
