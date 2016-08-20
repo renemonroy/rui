@@ -2,8 +2,6 @@ import React, { Component, PropTypes } from 'react';
 import { Motion, spring } from 'react-motion';
 import { fastEaseOutElastic, easeOut } from '../constants/SpringPresets';
 
-require('./RUISwipeableCards.styl');
-
 let styles = null;
 
 class RUISwipeableCards extends Component {
