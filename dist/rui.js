@@ -59,17 +59,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
+	exports.RUISwipeableCards = undefined;
 	
-	var _RUISwipeableCards = __webpack_require__(1);
+	var _RUISwipeableCards2 = __webpack_require__(1);
 	
-	Object.defineProperty(exports, 'RUISwipeableCards', {
-	  enumerable: true,
-	  get: function get() {
-	    return _interopRequireDefault(_RUISwipeableCards).default;
-	  }
-	});
-
+	var _RUISwipeableCards3 = _interopRequireDefault(_RUISwipeableCards2);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	exports.RUISwipeableCards = _RUISwipeableCards3.default;
 
 /***/ },
 /* 1 */

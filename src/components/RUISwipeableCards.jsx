@@ -1,12 +1,14 @@
 import React, { Component, PropTypes } from 'react';
+import Radium from 'radium';
 import { Motion, spring } from 'react-motion';
-import { fastEaseOutElastic, easeOut } from '../constants/SpringPresets';
+import { fastEaseOutElastic, easeOut } from '../constants/SpringPresets.jsx';
 
 let styles = null;
 
-class RUISwipeableCards extends Component {
+@Radium
+class UISwipeableCards extends Component {
 
-  static displayName = 'RUISwipeableCards';
+  static displayName = 'UISwipeableCards';
 
   static propTypes = {
     cardRenderer: PropTypes.func.isRequired,
@@ -45,8 +47,14 @@ class RUISwipeableCards extends Component {
     this.setState(this.constrain(from, size, next));
   }
 
-  getCardStyles(x) {
+  getPosCardStyles(i) {
+    const { baseStyl } = styles.cardStyl;
+    return [baseStyl, styles.cardStyl[`pos${i}`]];
+  }
+
+  getAnimCardStyles(x) {
     const { limit, condition } = this.state;
+    const { baseStyl } = styles.cardStyl;
     let deg = 0;
     let val = x;
     switch (condition) {
@@ -63,10 +71,11 @@ class RUISwipeableCards extends Component {
         val = 0;
     }
     const transStyle = `translate3d(${val}px, 32px, 0) scale(1) rotate(${deg}deg)`;
-    return {
+    const cardTransStyl = {
       transform: transStyle,
       WebkitTransform: transStyle,
     };
+    return [baseStyl, cardTransStyl];
   }
 
   animCard() {
@@ -142,52 +151,19 @@ class RUISwipeableCards extends Component {
     this.decide();
   }
 
-  handleDiscardClick(e) {
-    e.preventDefault();
-    this.setState({ mouse: -this.state.limit, condition: 2 }, () => {
-      setTimeout(() => this.decide(), 0);
-    });
-  }
-
-  handleAcceptClick(e) {
-    e.preventDefault();
-    this.setState({ mouse: this.state.limit, condition: 2 }, () => {
-      setTimeout(() => this.decide(), 0);
-    });
-  }
-
-  renderNavigation() {
-    return (
-      <div className="rui-swipeable-navigation">
-        <button
-          className="discard-button bg-black border-grey"
-          onClick={::this.handleDiscardClick}
-        >
-          <i className="glyph g72-thumbs-down text-color-white" />
-        </button>
-        <button
-          className="accept-button bg-black border-grey"
-          onClick={::this.handleAcceptClick}
-        >
-          <i className="glyph g72-thumbs-up text-color-white" />
-        </button>
-      </div>
-    );
-  }
-
   render() {
     const { cardRenderer, cardWidth, cardHeight } = this.props;
     const { from, size, condition } = this.state;
+    const { containerStyl, cardStyl } = styles;
+    const contDimStyl = { width: `${cardWidth}px`, height: `${cardHeight}px` };
     const cards = [];
-    const contStyles = { width: `${cardWidth}px`, height: `${cardHeight}px` };
-    const cs = styles.card;
     for (let i = 0; i < size; i++) {
       cards.unshift({ key: `snkr-card-${from + i}`, index: i });
     }
     this.lastIndex = size - 1;
     return (
       <div className="rui-swipeable-cards">
-        <div className="rui-swipeable-container" style={contStyles}>
+        <div style={[containerStyl, contDimStyl]}>
           {cards.map(({ key, index }) =>
             <Motion
               style={this.animCard()}
@@ -199,8 +175,10 @@ class RUISwipeableCards extends Component {
                   onTouchMove={::this.handleTouchMove}
                   onTouchEnd={::this.handleTouchEnd}
                   key={key}
-                  className={`rui-swipeable-card${condition !== 0 ? '' : ' rui-transition'}`}
-                  style={index === 0 ? this.getCardStyles(x) : cs[`st${index}`]}
+                  style={[
+                    index === 0 ? this.getAnimCardStyles(x) : this.getPosCardStyles(index),
+                    condition !== 0 ? null : cardStyl.transStyl,
+                  ]}
                 >
                   {cardRenderer(from + index, index)}
                 </div>
@@ -208,7 +186,6 @@ class RUISwipeableCards extends Component {
             </Motion>
           )}
         </div>
-        {cards.length > 0 ? this.renderNavigation() : null}
       </div>
     );
   }
@@ -216,24 +193,63 @@ class RUISwipeableCards extends Component {
 }
 
 styles = {
-  card: {
-    st1: {
+  containerStyl: {
+    margin: '0 auto',
+    perspective: '1500px',
+    position: 'realive',
+  },
+  cardStyl: {
+    baseStyl: {
+      backgroundColor: '#fff',
+      borderRadius: '.8rem',
+      height: '100%',
+      left: 0,
+      overflow: 'hidden',
+      position: 'absolute',
+      right: 0,
+      width: '100%',
+      zIndex: 1,
+    },
+    transStyl: {
+      transition: 'transform .3s',
+    },
+    pos1: {
       transform: 'translate3d(0, 16px, 0) scale(0.95)',
       WebkitTransform: 'translate3d(0, 16px, 0) scale(0.95)',
+      transition: 'none',
     },
-    st2: {
+    pos2: {
       transform: 'translate3d(0, 0px, 0) scale(0.9)',
       WebkitTransform: 'translate3d(0, 0px, 0) scale(0.9)',
+      transition: 'transform .3s',
     },
-    st3: {
+    pos3: {
       transform: 'translate3d(0, -16px, 0) scale(0.85)',
       WebkitTransform: 'translate3d(0, -16px, 0) scale(0.85)',
+      transition: 'transform .3s',
     },
-    st4: {
+    pos4: {
       transform: 'translate3d(0, -32px, 0) scale(0.8)',
       WebkitTransform: 'translate3d(0, -32px, 0) scale(0.8)',
+      transition: 'transform .3s',
     },
+  },
+  navStyl: {
+    position: 'relative',
+    bottom: '-4rem',
+    width: '100%',
+    display: 'flex',
+    justifyContent: 'center',
+  },
+  buttonStyl: {
+    height: '4rem',
+    width: '4rem',
+    textAlign: 'center',
+    margin: '0 .5rem',
+    fontSize: '1.8rem',
+    padding: 0,
+    borderRadius: '5rem',
   },
 };
 
-export default RUISwipeableCards;
+export default UISwipeableCards;
