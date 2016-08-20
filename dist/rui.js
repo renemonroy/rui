@@ -83,15 +83,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
-	var _class, _temp;
+	var _class, _class2, _temp;
 	
 	var _react = __webpack_require__(2);
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _reactMotion = __webpack_require__(3);
+	var _radium = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"radium\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
 	
-	var _SpringPresets = __webpack_require__(18);
+	var _radium2 = _interopRequireDefault(_radium);
+	
+	var _reactMotion = __webpack_require__(4);
+	
+	var _SpringPresets = __webpack_require__(19);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -103,13 +107,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var styles = null;
 	
-	var RUISwipeableCards = (_temp = _class = function (_Component) {
-	  _inherits(RUISwipeableCards, _Component);
+	var UISwipeableCards = (0, _radium2.default)(_class = (_temp = _class2 = function (_Component) {
+	  _inherits(UISwipeableCards, _Component);
 	
-	  function RUISwipeableCards(props) {
-	    _classCallCheck(this, RUISwipeableCards);
+	  function UISwipeableCards(props) {
+	    _classCallCheck(this, UISwipeableCards);
 	
-	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(RUISwipeableCards).call(this, props));
+	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(UISwipeableCards).call(this, props));
 	
 	    var _this$props = _this.props;
 	    var initialIndex = _this$props.initialIndex;
@@ -125,7 +129,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return _this;
 	  }
 	
-	  _createClass(RUISwipeableCards, [{
+	  _createClass(UISwipeableCards, [{
 	    key: 'componentWillReceiveProps',
 	    value: function componentWillReceiveProps(next) {
 	      var _state = this.state;
@@ -135,11 +139,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	      this.setState(this.constrain(from, size, next));
 	    }
 	  }, {
-	    key: 'getCardStyles',
-	    value: function getCardStyles(x) {
+	    key: 'getPosCardStyles',
+	    value: function getPosCardStyles(i) {
+	      var baseStyl = styles.cardStyl.baseStyl;
+	
+	      return [baseStyl, styles.cardStyl['pos' + i]];
+	    }
+	  }, {
+	    key: 'getAnimCardStyles',
+	    value: function getAnimCardStyles(x) {
 	      var _state2 = this.state;
 	      var limit = _state2.limit;
 	      var condition = _state2.condition;
+	      var baseStyl = styles.cardStyl.baseStyl;
 	
 	      var deg = 0;
 	      var val = x;
@@ -157,10 +169,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	          val = 0;
 	      }
 	      var transStyle = 'translate3d(' + val + 'px, 32px, 0) scale(1) rotate(' + deg + 'deg)';
-	      return {
+	      var cardTransStyl = {
 	        transform: transStyle,
 	        WebkitTransform: transStyle
 	      };
+	      return [baseStyl, cardTransStyl];
 	    }
 	  }, {
 	    key: 'animCard',
@@ -263,57 +276,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	      this.decide();
 	    }
 	  }, {
-	    key: 'handleDiscardClick',
-	    value: function handleDiscardClick(e) {
-	      var _this2 = this;
-	
-	      e.preventDefault();
-	      this.setState({ mouse: -this.state.limit, condition: 2 }, function () {
-	        setTimeout(function () {
-	          return _this2.decide();
-	        }, 0);
-	      });
-	    }
-	  }, {
-	    key: 'handleAcceptClick',
-	    value: function handleAcceptClick(e) {
-	      var _this3 = this;
-	
-	      e.preventDefault();
-	      this.setState({ mouse: this.state.limit, condition: 2 }, function () {
-	        setTimeout(function () {
-	          return _this3.decide();
-	        }, 0);
-	      });
-	    }
-	  }, {
-	    key: 'renderNavigation',
-	    value: function renderNavigation() {
-	      return _react2.default.createElement(
-	        'div',
-	        { className: 'rui-swipeable-navigation' },
-	        _react2.default.createElement(
-	          'button',
-	          {
-	            className: 'discard-button bg-black border-grey',
-	            onClick: this.handleDiscardClick.bind(this)
-	          },
-	          _react2.default.createElement('i', { className: 'glyph g72-thumbs-down text-color-white' })
-	        ),
-	        _react2.default.createElement(
-	          'button',
-	          {
-	            className: 'accept-button bg-black border-grey',
-	            onClick: this.handleAcceptClick.bind(this)
-	          },
-	          _react2.default.createElement('i', { className: 'glyph g72-thumbs-up text-color-white' })
-	        )
-	      );
-	    }
-	  }, {
 	    key: 'render',
 	    value: function render() {
-	      var _this4 = this;
+	      var _this2 = this;
 	
 	      var _props = this.props;
 	      var cardRenderer = _props.cardRenderer;
@@ -323,10 +288,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var from = _state8.from;
 	      var size = _state8.size;
 	      var condition = _state8.condition;
+	      var _styles = styles;
+	      var containerStyl = _styles.containerStyl;
+	      var cardStyl = _styles.cardStyl;
 	
+	      var contDimStyl = { width: cardWidth + 'px', height: cardHeight + 'px' };
 	      var cards = [];
-	      var contStyles = { width: cardWidth + 'px', height: cardHeight + 'px' };
-	      var cs = styles.card;
 	      for (var i = 0; i < size; i++) {
 	        cards.unshift({ key: 'snkr-card-' + (from + i), index: i });
 	      }
@@ -336,14 +303,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	        { className: 'rui-swipeable-cards' },
 	        _react2.default.createElement(
 	          'div',
-	          { className: 'rui-swipeable-container', style: contStyles },
+	          { style: [containerStyl, contDimStyl] },
 	          cards.map(function (_ref2) {
 	            var key = _ref2.key;
 	            var index = _ref2.index;
 	            return _react2.default.createElement(
 	              _reactMotion.Motion,
 	              {
-	                style: _this4.animCard(),
+	                style: _this2.animCard(),
 	                key: 'rui-card-motion-' + key
 	              },
 	              function (_ref3) {
@@ -351,33 +318,31 @@ return /******/ (function(modules) { // webpackBootstrap
 	                return _react2.default.createElement(
 	                  'div',
 	                  {
-	                    onTouchStart: _this4.handleTouchStart.bind(_this4, x),
-	                    onTouchMove: _this4.handleTouchMove.bind(_this4),
-	                    onTouchEnd: _this4.handleTouchEnd.bind(_this4),
+	                    onTouchStart: _this2.handleTouchStart.bind(_this2, x),
+	                    onTouchMove: _this2.handleTouchMove.bind(_this2),
+	                    onTouchEnd: _this2.handleTouchEnd.bind(_this2),
 	                    key: key,
-	                    className: 'rui-swipeable-card' + (condition !== 0 ? '' : ' rui-transition'),
-	                    style: index === 0 ? _this4.getCardStyles(x) : cs['st' + index]
+	                    style: [index === 0 ? _this2.getAnimCardStyles(x) : _this2.getPosCardStyles(index), condition !== 0 ? null : cardStyl.transStyl]
 	                  },
 	                  cardRenderer(from + index, index)
 	                );
 	              }
 	            );
 	          })
-	        ),
-	        cards.length > 0 ? this.renderNavigation() : null
+	        )
 	      );
 	    }
 	  }]);
 	
-	  return RUISwipeableCards;
-	}(_react.Component), _class.displayName = 'RUISwipeableCards', _class.propTypes = {
+	  return UISwipeableCards;
+	}(_react.Component), _class2.displayName = 'UISwipeableCards', _class2.propTypes = {
 	  cardRenderer: _react.PropTypes.func.isRequired,
 	  length: _react.PropTypes.number,
 	  stackSize: _react.PropTypes.number,
 	  initialIndex: _react.PropTypes.number,
 	  cardWidth: _react.PropTypes.number,
 	  cardHeight: _react.PropTypes.number
-	}, _class.defaultProps = {
+	}, _class2.defaultProps = {
 	  cardRenderer: function cardRenderer(i, k) {
 	    return _react2.default.createElement(
 	      'div',
@@ -390,31 +355,69 @@ return /******/ (function(modules) { // webpackBootstrap
 	  initialIndex: 0,
 	  cardWidth: 320,
 	  cardHeight: 480
-	}, _temp);
-	
+	}, _temp)) || _class;
 	
 	styles = {
-	  card: {
-	    st1: {
+	  containerStyl: {
+	    margin: '0 auto',
+	    perspective: '1500px',
+	    position: 'realive'
+	  },
+	  cardStyl: {
+	    baseStyl: {
+	      backgroundColor: '#fff',
+	      borderRadius: '.8rem',
+	      height: '100%',
+	      left: 0,
+	      overflow: 'hidden',
+	      position: 'absolute',
+	      right: 0,
+	      width: '100%',
+	      zIndex: 1
+	    },
+	    transStyl: {
+	      transition: 'transform .3s'
+	    },
+	    pos1: {
 	      transform: 'translate3d(0, 16px, 0) scale(0.95)',
-	      WebkitTransform: 'translate3d(0, 16px, 0) scale(0.95)'
+	      WebkitTransform: 'translate3d(0, 16px, 0) scale(0.95)',
+	      transition: 'none'
 	    },
-	    st2: {
+	    pos2: {
 	      transform: 'translate3d(0, 0px, 0) scale(0.9)',
-	      WebkitTransform: 'translate3d(0, 0px, 0) scale(0.9)'
+	      WebkitTransform: 'translate3d(0, 0px, 0) scale(0.9)',
+	      transition: 'transform .3s'
 	    },
-	    st3: {
+	    pos3: {
 	      transform: 'translate3d(0, -16px, 0) scale(0.85)',
-	      WebkitTransform: 'translate3d(0, -16px, 0) scale(0.85)'
+	      WebkitTransform: 'translate3d(0, -16px, 0) scale(0.85)',
+	      transition: 'transform .3s'
 	    },
-	    st4: {
+	    pos4: {
 	      transform: 'translate3d(0, -32px, 0) scale(0.8)',
-	      WebkitTransform: 'translate3d(0, -32px, 0) scale(0.8)'
+	      WebkitTransform: 'translate3d(0, -32px, 0) scale(0.8)',
+	      transition: 'transform .3s'
 	    }
+	  },
+	  navStyl: {
+	    position: 'relative',
+	    bottom: '-4rem',
+	    width: '100%',
+	    display: 'flex',
+	    justifyContent: 'center'
+	  },
+	  buttonStyl: {
+	    height: '4rem',
+	    width: '4rem',
+	    textAlign: 'center',
+	    margin: '0 .5rem',
+	    fontSize: '1.8rem',
+	    padding: 0,
+	    borderRadius: '5rem'
 	  }
 	};
 	
-	exports.default = RUISwipeableCards;
+	exports.default = UISwipeableCards;
 
 /***/ },
 /* 2 */
@@ -423,7 +426,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = __WEBPACK_EXTERNAL_MODULE_2__;
 
 /***/ },
-/* 3 */
+/* 3 */,
+/* 4 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -434,34 +438,34 @@ return /******/ (function(modules) { // webpackBootstrap
 	  return obj && obj.__esModule ? obj['default'] : obj;
 	}
 	
-	var _Motion = __webpack_require__(4);
+	var _Motion = __webpack_require__(5);
 	
 	exports.Motion = _interopRequire(_Motion);
 	
-	var _StaggeredMotion = __webpack_require__(12);
+	var _StaggeredMotion = __webpack_require__(13);
 	
 	exports.StaggeredMotion = _interopRequire(_StaggeredMotion);
 	
-	var _TransitionMotion = __webpack_require__(13);
+	var _TransitionMotion = __webpack_require__(14);
 	
 	exports.TransitionMotion = _interopRequire(_TransitionMotion);
 	
-	var _spring = __webpack_require__(15);
+	var _spring = __webpack_require__(16);
 	
 	exports.spring = _interopRequire(_spring);
 	
-	var _presets = __webpack_require__(16);
+	var _presets = __webpack_require__(17);
 	
 	exports.presets = _interopRequire(_presets);
 	
 	// deprecated, dummy warning function
 	
-	var _reorderKeys = __webpack_require__(17);
+	var _reorderKeys = __webpack_require__(18);
 	
 	exports.reorderKeys = _interopRequire(_reorderKeys);
 
 /***/ },
-/* 4 */
+/* 5 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -482,27 +486,27 @@ return /******/ (function(modules) { // webpackBootstrap
 	  return obj && obj.__esModule ? obj : { 'default': obj };
 	}
 	
-	var _mapToZero = __webpack_require__(5);
+	var _mapToZero = __webpack_require__(6);
 	
 	var _mapToZero2 = _interopRequireDefault(_mapToZero);
 	
-	var _stripStyle = __webpack_require__(6);
+	var _stripStyle = __webpack_require__(7);
 	
 	var _stripStyle2 = _interopRequireDefault(_stripStyle);
 	
-	var _stepper3 = __webpack_require__(7);
+	var _stepper3 = __webpack_require__(8);
 	
 	var _stepper4 = _interopRequireDefault(_stepper3);
 	
-	var _performanceNow = __webpack_require__(8);
+	var _performanceNow = __webpack_require__(9);
 	
 	var _performanceNow2 = _interopRequireDefault(_performanceNow);
 	
-	var _raf = __webpack_require__(10);
+	var _raf = __webpack_require__(11);
 	
 	var _raf2 = _interopRequireDefault(_raf);
 	
-	var _shouldStopAnimation = __webpack_require__(11);
+	var _shouldStopAnimation = __webpack_require__(12);
 	
 	var _shouldStopAnimation2 = _interopRequireDefault(_shouldStopAnimation);
 	
@@ -717,7 +721,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 5 */
+/* 6 */
 /***/ function(module, exports) {
 
 	
@@ -741,7 +745,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 6 */
+/* 7 */
 /***/ function(module, exports) {
 
 	
@@ -767,7 +771,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 7 */
+/* 8 */
 /***/ function(module, exports) {
 
 	
@@ -815,7 +819,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	// array reference around.
 
 /***/ },
-/* 8 */
+/* 9 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {"use strict";
@@ -851,10 +855,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	    loadTime = new Date().getTime();
 	  }
 	}).call(undefined);
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(9)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(10)))
 
 /***/ },
-/* 9 */
+/* 10 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -1020,12 +1024,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 10 */
+/* 11 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {'use strict';
 	
-	var now = __webpack_require__(8),
+	var now = __webpack_require__(9),
 	    root = typeof window === 'undefined' ? global : window,
 	    vendors = ['moz', 'webkit'],
 	    suffix = 'AnimationFrame',
@@ -1101,7 +1105,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 11 */
+/* 12 */
 /***/ function(module, exports) {
 
 	
@@ -1137,7 +1141,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 12 */
+/* 13 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1158,27 +1162,27 @@ return /******/ (function(modules) { // webpackBootstrap
 	  return obj && obj.__esModule ? obj : { 'default': obj };
 	}
 	
-	var _mapToZero = __webpack_require__(5);
+	var _mapToZero = __webpack_require__(6);
 	
 	var _mapToZero2 = _interopRequireDefault(_mapToZero);
 	
-	var _stripStyle = __webpack_require__(6);
+	var _stripStyle = __webpack_require__(7);
 	
 	var _stripStyle2 = _interopRequireDefault(_stripStyle);
 	
-	var _stepper3 = __webpack_require__(7);
+	var _stepper3 = __webpack_require__(8);
 	
 	var _stepper4 = _interopRequireDefault(_stepper3);
 	
-	var _performanceNow = __webpack_require__(8);
+	var _performanceNow = __webpack_require__(9);
 	
 	var _performanceNow2 = _interopRequireDefault(_performanceNow);
 	
-	var _raf = __webpack_require__(10);
+	var _raf = __webpack_require__(11);
 	
 	var _raf2 = _interopRequireDefault(_raf);
 	
-	var _shouldStopAnimation = __webpack_require__(11);
+	var _shouldStopAnimation = __webpack_require__(12);
 	
 	var _shouldStopAnimation2 = _interopRequireDefault(_shouldStopAnimation);
 	
@@ -1414,7 +1418,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 13 */
+/* 14 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1435,31 +1439,31 @@ return /******/ (function(modules) { // webpackBootstrap
 	  return obj && obj.__esModule ? obj : { 'default': obj };
 	}
 	
-	var _mapToZero = __webpack_require__(5);
+	var _mapToZero = __webpack_require__(6);
 	
 	var _mapToZero2 = _interopRequireDefault(_mapToZero);
 	
-	var _stripStyle = __webpack_require__(6);
+	var _stripStyle = __webpack_require__(7);
 	
 	var _stripStyle2 = _interopRequireDefault(_stripStyle);
 	
-	var _stepper3 = __webpack_require__(7);
+	var _stepper3 = __webpack_require__(8);
 	
 	var _stepper4 = _interopRequireDefault(_stepper3);
 	
-	var _mergeDiff = __webpack_require__(14);
+	var _mergeDiff = __webpack_require__(15);
 	
 	var _mergeDiff2 = _interopRequireDefault(_mergeDiff);
 	
-	var _performanceNow = __webpack_require__(8);
+	var _performanceNow = __webpack_require__(9);
 	
 	var _performanceNow2 = _interopRequireDefault(_performanceNow);
 	
-	var _raf = __webpack_require__(10);
+	var _raf = __webpack_require__(11);
 	
 	var _raf2 = _interopRequireDefault(_raf);
 	
-	var _shouldStopAnimation = __webpack_require__(11);
+	var _shouldStopAnimation = __webpack_require__(12);
 	
 	var _shouldStopAnimation2 = _interopRequireDefault(_shouldStopAnimation);
 	
@@ -1917,7 +1921,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	// that you've unmounted but that's still animating. This is where it lives
 
 /***/ },
-/* 14 */
+/* 15 */
 /***/ function(module, exports) {
 
 	
@@ -2030,7 +2034,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	// to loop through and find a key's index each time), but I no longer care
 
 /***/ },
-/* 15 */
+/* 16 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -2053,7 +2057,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  return obj && obj.__esModule ? obj : { 'default': obj };
 	}
 	
-	var _presets = __webpack_require__(16);
+	var _presets = __webpack_require__(17);
 	
 	var _presets2 = _interopRequireDefault(_presets);
 	
@@ -2068,7 +2072,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 16 */
+/* 17 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -2083,7 +2087,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports["default"];
 
 /***/ },
-/* 17 */
+/* 18 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
@@ -2103,10 +2107,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 	
 	module.exports = exports['default'];
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(9)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(10)))
 
 /***/ },
-/* 18 */
+/* 19 */
 /***/ function(module, exports) {
 
 	"use strict";

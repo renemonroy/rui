@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import Radium from 'radium';
 import { Motion, spring } from 'react-motion';
-import { fastEaseOutElastic, easeOut } from '../constants/SpringPresets.jsx';
+import { fastEaseOutElastic, easeOut } from '../constants/SpringPresets';
 
 let styles = null;
 
