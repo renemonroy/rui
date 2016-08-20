@@ -418,6 +418,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 	
 	exports.default = UISwipeableCards;
+	module.exports = exports['default'];
 
 /***/ },
 /* 2 */
