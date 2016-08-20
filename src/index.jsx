@@ -1,1 +1,1 @@
-export RUISwipeableCards from './components/RUISwipeableCards';
+export { default as RUISwipeableCards } from './components/RUISwipeableCards';

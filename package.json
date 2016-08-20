@@ -4,11 +4,12 @@
   "description": "Set of custom React Components that form an UI library.",
   "main": "lib/rui.js",
   "scripts": {
-    "build:lib": "NODE_ENV=development webpack",
-    "build:dist": "NODE_ENV=production webpack -p --define process.env.NODE_ENV='\"production\"' --progress --colors",
-    "build": "npm run build:lib",
+    "start": "node server.js",
     "clean": "rimraf lib dist",
-    "prepublish": "npm run clean && npm run build"
+    "build:examples": "webpack",
+    "build:lib": "babel src --out-dir lib",
+    "build:dist": "webpack --config webpack.prod.config.js",
+    "prerelease": "npm run clean && npm run build:lib && npm run build:dist"
   },
   "repository": {
     "type": "git",
@@ -18,7 +19,7 @@
     "react",
     "ui"
   ],
-  "author": "René Monroy",
+  "author": "renemonroy",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/renemonroy/rui/issues"
