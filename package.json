@@ -1,6 +1,6 @@
 {
   "name": "@renemonroy/rui",
-  "version": "1.0.11",
+  "version": "1.0.12",
   "description": "Set of custom React Components that form an UI library.",
   "main": "lib/rui.js",
   "scripts": {
