@@ -1,8 +1,8 @@
 {
   "name": "@renemonroy/rui",
-  "version": "1.0.14",
+  "version": "1.0.15",
   "description": "Set of custom React Components that form an UI library.",
-  "main": "lib/rui.js",
+  "main": "lib/index.js",
   "scripts": {
     "start": "node server.js",
     "clean": "rimraf lib dist",
