@@ -1,6 +1,7 @@
 {
   "presets": [
     "es2015",
+    "es2015-loose",
     "stage-0",
     "stage-1",
     "stage-2",
